@@ -1,11 +1,15 @@
 import { serveStatic } from "hono/bun";
-
+import { logger } from "hono/logger";
 import createApp from "@/lib/create-app";
 import auth from "@/routes/auth";
-
+import ocr from "@/routes/ocr";
+import { requestId } from "hono/request-id";
 const app = createApp();
+app.use("*", requestId());
 
-const routes = [auth] as const;
+app.use("*", logger());
+
+const routes = [auth, ocr] as const;
 
 routes.forEach((route) => {
   app.basePath("/api").route("/", route);
