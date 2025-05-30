@@ -1,16 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSession } from "../lib/auth-client";
+import { Button } from "@/components/ui/button";
+
 export const Route = createFileRoute("/")({
-  component: Index,
+  component: App,
 });
 
-function Index() {
-  const { data: session } = useSession();
-
-  return (
-    <div className="p-2">
-      <h3>Welcome Home!</h3>
-      {session && <div>Hello {session.user.name}</div>}
-    </div>
-  );
+function App() {
+  return <main>this is empty</main>;
 }

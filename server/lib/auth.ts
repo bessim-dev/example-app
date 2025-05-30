@@ -1,7 +1,8 @@
-import { Role } from "@prisma/client";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-
+import { admin } from "better-auth/plugins";
+import { apiKey } from "better-auth/plugins";
+import { organization } from "better-auth/plugins";
 import prisma from "./db";
 
 export const auth = betterAuth({
@@ -9,7 +10,7 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
   // Allow requests from the frontend development server
-  trustedOrigins: ["http://localhost:5173"],
+  trustedOrigins: ["http://localhost:3003"],
   emailAndPassword: {
     enabled: true,
   },
@@ -23,13 +24,5 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     },
   },
-  user: {
-    additionalFields: {
-      roles: {
-        type: [Role.STUDENT, Role.CREATOR, Role.ADMIN],
-        required: true,
-        defaultValue: [Role.STUDENT],
-      },
-    },
-  },
+  plugins: [admin(), apiKey(), organization()],
 });

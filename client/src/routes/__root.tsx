@@ -1,36 +1,26 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { signOut, useSession } from "../lib/auth-client";
+import { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import type { authClient } from "@/lib/auth-client";
 
-export const Route = createRootRoute({
-  component: RouteComponent,
+export interface RouterContext {
+  queryClient: QueryClient;
+  auth: {
+    isAuthenticated: boolean;
+  } & typeof authClient;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
+  component: RootComponent,
 });
 
-function RouteComponent() {
-  const { data: session } = useSession();
-
+function RootComponent() {
   return (
     <>
-      <div className="p-2 flex">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{" "}
-        {session ? (
-          <button onClick={() => signOut()}>Sign Out</button>
-        ) : (
-          <>
-            <Link to="/login" className="[&.active]:font-bold">
-              Login
-            </Link>{" "}
-            <Link to="/register" className="[&.active]:font-bold">
-              Register
-            </Link>
-          </>
-        )}
-      </div>
-      <hr />
       <Outlet />
-      <TanStackRouterDevtools />
+      <ReactQueryDevtools buttonPosition="top-right" />
+      <TanStackRouterDevtools position="bottom-right" />
     </>
   );
 }
