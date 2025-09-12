@@ -33,6 +33,8 @@ model User {
   members     Member[]
   invitations Invitation[]
 
+  stripeCustomerId String?
+
   @@map("user")
 }
 
@@ -149,4 +151,19 @@ model Invitation {
   user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
 
   @@map("invitation")
+}
+
+model Subscription {
+  id                   String    @id
+  plan                 String
+  referenceId          String
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  status               String?
+  periodStart          DateTime?
+  periodEnd            DateTime?
+  cancelAtPeriodEnd    Boolean?
+  seats                Int?
+
+  @@map("subscription")
 }

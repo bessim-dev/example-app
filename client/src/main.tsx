@@ -36,12 +36,13 @@ declare module "@tanstack/react-router" {
 function InnerApp() {
   const auth = authClient;
   const { data: session, isPending } = auth.useSession();
+  const { data: activeOrganization, isPending: isActiveOrganizationPending } =
+    auth.useActiveOrganization();
 
-  if (isPending) {
+  if (isPending || isActiveOrganizationPending) {
     return <div>Loading...</div>;
   }
   const isAuthenticated = !!session && !!session.user;
-
   return (
     <RouterProvider
       router={router}
@@ -50,6 +51,7 @@ function InnerApp() {
         auth: {
           ...auth,
           isAuthenticated,
+          activeOrganization,
         },
       }}
     />

@@ -6,6 +6,7 @@ import ocr from "@/routes/ocr";
 import { requestId } from "hono/request-id";
 import { cors } from "hono/cors";
 import { handleRootAdminUser } from "@/services/auth-service";
+import admin from "@/routes/admin";
 
 const app = createApp();
 
@@ -33,7 +34,7 @@ app.use(
 app.use("*", requestId());
 app.use("*", logger());
 
-const routes = [auth, ocr] as const;
+const routes = [auth, ocr, admin] as const;
 
 routes.forEach((route) => {
   app.basePath("/api").route("/", route);

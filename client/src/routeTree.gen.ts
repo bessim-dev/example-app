@@ -8,190 +8,317 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthOnBoardingRouteImport } from './routes/_auth/on-boarding'
+import { Route as AuthDashboardLayoutRouteImport } from './routes/_auth/_dashboardLayout'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as AuthDashboardLayoutRequestsRouteImport } from './routes/_auth/_dashboardLayout/requests'
+import { Route as AuthDashboardLayoutDashboardRouteImport } from './routes/_auth/_dashboardLayout/dashboard'
+import { Route as AuthDashboardLayoutApiKeysRouteImport } from './routes/_auth/_dashboardLayout/api-keys'
+import { Route as AuthDashboardLayoutOrganizationsIndexRouteImport } from './routes/_auth/_dashboardLayout/organizations/index'
+import { Route as AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteImport } from './routes/_auth/_dashboardLayout/organizations/$organizationId/route'
+import { Route as AuthDashboardLayoutOrganizationsOrganizationIdIndexRouteImport } from './routes/_auth/_dashboardLayout/organizations/$organizationId/index'
+import { Route as AuthDashboardLayoutOrganizationsOrganizationIdMembersRouteImport } from './routes/_auth/_dashboardLayout/organizations/$organizationId/members'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as AuthImport } from './routes/_auth'
-import { Route as IndexImport } from './routes/index'
-import { Route as AuthDashboardImport } from './routes/_auth/dashboard'
-import { Route as AuthApiKeysImport } from './routes/_auth/api-keys'
-import { Route as authLoginImport } from './routes/(auth)/login'
-
-// Create/Update Routes
-
-const AuthRoute = AuthImport.update({
+const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthDashboardRoute = AuthDashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const AuthOnBoardingRoute = AuthOnBoardingRouteImport.update({
+  id: '/on-boarding',
+  path: '/on-boarding',
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthApiKeysRoute = AuthApiKeysImport.update({
-  id: '/api-keys',
-  path: '/api-keys',
+const AuthDashboardLayoutRoute = AuthDashboardLayoutRouteImport.update({
+  id: '/_dashboardLayout',
   getParentRoute: () => AuthRoute,
 } as any)
-
-const authLoginRoute = authLoginImport.update({
+const authLoginRoute = authLoginRouteImport.update({
   id: '/(auth)/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthImport
-      parentRoute: typeof rootRoute
-    }
-    '/(auth)/login': {
-      id: '/(auth)/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof authLoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/_auth/api-keys': {
-      id: '/_auth/api-keys'
-      path: '/api-keys'
-      fullPath: '/api-keys'
-      preLoaderRoute: typeof AuthApiKeysImport
-      parentRoute: typeof AuthImport
-    }
-    '/_auth/dashboard': {
-      id: '/_auth/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthDashboardImport
-      parentRoute: typeof AuthImport
-    }
-  }
-}
-
-// Create and export the route tree
-
-interface AuthRouteChildren {
-  AuthApiKeysRoute: typeof AuthApiKeysRoute
-  AuthDashboardRoute: typeof AuthDashboardRoute
-}
-
-const AuthRouteChildren: AuthRouteChildren = {
-  AuthApiKeysRoute: AuthApiKeysRoute,
-  AuthDashboardRoute: AuthDashboardRoute,
-}
-
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+const AuthDashboardLayoutRequestsRoute =
+  AuthDashboardLayoutRequestsRouteImport.update({
+    id: '/requests',
+    path: '/requests',
+    getParentRoute: () => AuthDashboardLayoutRoute,
+  } as any)
+const AuthDashboardLayoutDashboardRoute =
+  AuthDashboardLayoutDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthDashboardLayoutRoute,
+  } as any)
+const AuthDashboardLayoutApiKeysRoute =
+  AuthDashboardLayoutApiKeysRouteImport.update({
+    id: '/api-keys',
+    path: '/api-keys',
+    getParentRoute: () => AuthDashboardLayoutRoute,
+  } as any)
+const AuthDashboardLayoutOrganizationsIndexRoute =
+  AuthDashboardLayoutOrganizationsIndexRouteImport.update({
+    id: '/organizations/',
+    path: '/organizations/',
+    getParentRoute: () => AuthDashboardLayoutRoute,
+  } as any)
+const AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute =
+  AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteImport.update({
+    id: '/organizations/$organizationId',
+    path: '/organizations/$organizationId',
+    getParentRoute: () => AuthDashboardLayoutRoute,
+  } as any)
+const AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute =
+  AuthDashboardLayoutOrganizationsOrganizationIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () =>
+      AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute,
+  } as any)
+const AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute =
+  AuthDashboardLayoutOrganizationsOrganizationIdMembersRouteImport.update({
+    id: '/members',
+    path: '/members',
+    getParentRoute: () =>
+      AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof AuthRouteWithChildren
   '/login': typeof authLoginRoute
-  '/api-keys': typeof AuthApiKeysRoute
-  '/dashboard': typeof AuthDashboardRoute
+  '/on-boarding': typeof AuthOnBoardingRoute
+  '/api-keys': typeof AuthDashboardLayoutApiKeysRoute
+  '/dashboard': typeof AuthDashboardLayoutDashboardRoute
+  '/requests': typeof AuthDashboardLayoutRequestsRoute
+  '/organizations/$organizationId': typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren
+  '/organizations': typeof AuthDashboardLayoutOrganizationsIndexRoute
+  '/organizations/$organizationId/members': typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute
+  '/organizations/$organizationId/': typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute
 }
-
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof AuthRouteWithChildren
   '/login': typeof authLoginRoute
-  '/api-keys': typeof AuthApiKeysRoute
-  '/dashboard': typeof AuthDashboardRoute
+  '/on-boarding': typeof AuthOnBoardingRoute
+  '/api-keys': typeof AuthDashboardLayoutApiKeysRoute
+  '/dashboard': typeof AuthDashboardLayoutDashboardRoute
+  '/requests': typeof AuthDashboardLayoutRequestsRoute
+  '/organizations': typeof AuthDashboardLayoutOrganizationsIndexRoute
+  '/organizations/$organizationId/members': typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute
+  '/organizations/$organizationId': typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/(auth)/login': typeof authLoginRoute
-  '/_auth/api-keys': typeof AuthApiKeysRoute
-  '/_auth/dashboard': typeof AuthDashboardRoute
+  '/_auth/_dashboardLayout': typeof AuthDashboardLayoutRouteWithChildren
+  '/_auth/on-boarding': typeof AuthOnBoardingRoute
+  '/_auth/_dashboardLayout/api-keys': typeof AuthDashboardLayoutApiKeysRoute
+  '/_auth/_dashboardLayout/dashboard': typeof AuthDashboardLayoutDashboardRoute
+  '/_auth/_dashboardLayout/requests': typeof AuthDashboardLayoutRequestsRoute
+  '/_auth/_dashboardLayout/organizations/$organizationId': typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren
+  '/_auth/_dashboardLayout/organizations/': typeof AuthDashboardLayoutOrganizationsIndexRoute
+  '/_auth/_dashboardLayout/organizations/$organizationId/members': typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute
+  '/_auth/_dashboardLayout/organizations/$organizationId/': typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/login' | '/api-keys' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/on-boarding'
+    | '/api-keys'
+    | '/dashboard'
+    | '/requests'
+    | '/organizations/$organizationId'
+    | '/organizations'
+    | '/organizations/$organizationId/members'
+    | '/organizations/$organizationId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/api-keys' | '/dashboard'
+  to:
+    | '/'
+    | '/login'
+    | '/on-boarding'
+    | '/api-keys'
+    | '/dashboard'
+    | '/requests'
+    | '/organizations'
+    | '/organizations/$organizationId/members'
+    | '/organizations/$organizationId'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/(auth)/login'
-    | '/_auth/api-keys'
-    | '/_auth/dashboard'
+    | '/_auth/_dashboardLayout'
+    | '/_auth/on-boarding'
+    | '/_auth/_dashboardLayout/api-keys'
+    | '/_auth/_dashboardLayout/dashboard'
+    | '/_auth/_dashboardLayout/requests'
+    | '/_auth/_dashboardLayout/organizations/$organizationId'
+    | '/_auth/_dashboardLayout/organizations/'
+    | '/_auth/_dashboardLayout/organizations/$organizationId/members'
+    | '/_auth/_dashboardLayout/organizations/$organizationId/'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   authLoginRoute: typeof authLoginRoute
 }
 
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/on-boarding': {
+      id: '/_auth/on-boarding'
+      path: '/on-boarding'
+      fullPath: '/on-boarding'
+      preLoaderRoute: typeof AuthOnBoardingRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/_dashboardLayout': {
+      id: '/_auth/_dashboardLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthDashboardLayoutRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/_dashboardLayout/requests': {
+      id: '/_auth/_dashboardLayout/requests'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof AuthDashboardLayoutRequestsRouteImport
+      parentRoute: typeof AuthDashboardLayoutRoute
+    }
+    '/_auth/_dashboardLayout/dashboard': {
+      id: '/_auth/_dashboardLayout/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthDashboardLayoutDashboardRouteImport
+      parentRoute: typeof AuthDashboardLayoutRoute
+    }
+    '/_auth/_dashboardLayout/api-keys': {
+      id: '/_auth/_dashboardLayout/api-keys'
+      path: '/api-keys'
+      fullPath: '/api-keys'
+      preLoaderRoute: typeof AuthDashboardLayoutApiKeysRouteImport
+      parentRoute: typeof AuthDashboardLayoutRoute
+    }
+    '/_auth/_dashboardLayout/organizations/': {
+      id: '/_auth/_dashboardLayout/organizations/'
+      path: '/organizations'
+      fullPath: '/organizations'
+      preLoaderRoute: typeof AuthDashboardLayoutOrganizationsIndexRouteImport
+      parentRoute: typeof AuthDashboardLayoutRoute
+    }
+    '/_auth/_dashboardLayout/organizations/$organizationId': {
+      id: '/_auth/_dashboardLayout/organizations/$organizationId'
+      path: '/organizations/$organizationId'
+      fullPath: '/organizations/$organizationId'
+      preLoaderRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteImport
+      parentRoute: typeof AuthDashboardLayoutRoute
+    }
+    '/_auth/_dashboardLayout/organizations/$organizationId/': {
+      id: '/_auth/_dashboardLayout/organizations/$organizationId/'
+      path: '/'
+      fullPath: '/organizations/$organizationId/'
+      preLoaderRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRouteImport
+      parentRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute
+    }
+    '/_auth/_dashboardLayout/organizations/$organizationId/members': {
+      id: '/_auth/_dashboardLayout/organizations/$organizationId/members'
+      path: '/members'
+      fullPath: '/organizations/$organizationId/members'
+      preLoaderRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRouteImport
+      parentRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute
+    }
+  }
+}
+
+interface AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteChildren {
+  AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute
+  AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute
+}
+
+const AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteChildren: AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteChildren =
+  {
+    AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute:
+      AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute,
+    AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute:
+      AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute,
+  }
+
+const AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren =
+  AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute._addFileChildren(
+    AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteChildren,
+  )
+
+interface AuthDashboardLayoutRouteChildren {
+  AuthDashboardLayoutApiKeysRoute: typeof AuthDashboardLayoutApiKeysRoute
+  AuthDashboardLayoutDashboardRoute: typeof AuthDashboardLayoutDashboardRoute
+  AuthDashboardLayoutRequestsRoute: typeof AuthDashboardLayoutRequestsRoute
+  AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren
+  AuthDashboardLayoutOrganizationsIndexRoute: typeof AuthDashboardLayoutOrganizationsIndexRoute
+}
+
+const AuthDashboardLayoutRouteChildren: AuthDashboardLayoutRouteChildren = {
+  AuthDashboardLayoutApiKeysRoute: AuthDashboardLayoutApiKeysRoute,
+  AuthDashboardLayoutDashboardRoute: AuthDashboardLayoutDashboardRoute,
+  AuthDashboardLayoutRequestsRoute: AuthDashboardLayoutRequestsRoute,
+  AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute:
+    AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren,
+  AuthDashboardLayoutOrganizationsIndexRoute:
+    AuthDashboardLayoutOrganizationsIndexRoute,
+}
+
+const AuthDashboardLayoutRouteWithChildren =
+  AuthDashboardLayoutRoute._addFileChildren(AuthDashboardLayoutRouteChildren)
+
+interface AuthRouteChildren {
+  AuthDashboardLayoutRoute: typeof AuthDashboardLayoutRouteWithChildren
+  AuthOnBoardingRoute: typeof AuthOnBoardingRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthDashboardLayoutRoute: AuthDashboardLayoutRouteWithChildren,
+  AuthOnBoardingRoute: AuthOnBoardingRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   authLoginRoute: authLoginRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_auth",
-        "/(auth)/login"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_auth": {
-      "filePath": "_auth.tsx",
-      "children": [
-        "/_auth/api-keys",
-        "/_auth/dashboard"
-      ]
-    },
-    "/(auth)/login": {
-      "filePath": "(auth)/login.tsx"
-    },
-    "/_auth/api-keys": {
-      "filePath": "_auth/api-keys.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/dashboard": {
-      "filePath": "_auth/dashboard.tsx",
-      "parent": "/_auth"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

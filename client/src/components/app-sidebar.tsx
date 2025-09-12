@@ -4,20 +4,18 @@ import {
   IconChartBar,
   IconDashboard,
   IconDatabase,
-  IconFileAi,
   IconFileDescription,
   IconFileWord,
-  IconFolder,
   IconHelp,
   IconInnerShadowTop,
   IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
-  IconUsers,
   IconApi,
   IconKey,
   IconCreditCard,
+  IconBuilding,
 } from "@tabler/icons-react";
 
 import { NavDocuments } from "@/components/nav-documents";
@@ -33,6 +31,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { TeamSwitcher } from "./team-switcher";
 
 const data = {
   navMain: [
@@ -43,7 +42,7 @@ const data = {
     },
     {
       title: "OCR Requests",
-      url: "#",
+      url: "/requests",
       icon: IconListDetails,
     },
     {
@@ -57,10 +56,15 @@ const data = {
       icon: IconKey,
     },
     {
-      title: "Billing",
-      url: "#",
-      icon: IconCreditCard,
+      title: "Organizations",
+      url: "/organizations",
+      icon: IconBuilding,
     },
+    // {
+    //   title: "Billing",
+    //   url: "#",
+    //   icon: IconCreditCard,
+    // },
   ],
   navClouds: [
     {
@@ -154,18 +158,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5">
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">OCRus</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

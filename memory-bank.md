@@ -46,6 +46,78 @@
 - Sidebar includes user profile with logout functionality and upgrade prompts.
 - Protected by TanStack Router auth guards using `beforeLoad` patterns.
 
+### Payment & Subscription Strategy (May 2024)
+
+- **Payment Provider**: Stripe chosen for robust API, excellent developer experience, and Better-auth integration
+- **Better-auth Stripe Plugin**: Leveraging the official plugin for seamless auth + payment integration
+- **Subscription Model**: Organization-based subscriptions (not user-based) for B2B SaaS approach
+- **Plan Structure**:
+  - **Trial**: 1 week trials with 20 requests/day limit (140 total) - testing and small projects
+  - **Starter**: $29/month, 10,000 requests/month - small businesses (most popular)
+  - **Professional**: $99/month, 50,000 requests/month - growing businesses
+  - **Enterprise**: Custom pricing, unlimited requests - large organizations
+- **Reference System**: Using organization IDs as referenceId for team subscriptions
+- **Enterprise Sales**: "Contact Sales" for Enterprise tier - no self-service signup
+- **Usage Overage**: Block requests when plan limits exceeded (no auto-charging)
+- **Payment Timing**: Subscriptions start immediately after plan selection
+- **Multi-region**: Stripe handles currency/tax for international clients (starting with French market)
+- **Annual Discounts**: 17% discount for annual billing to improve cash flow
+- **Manual Onboarding**: Start with manual client onboarding via admin dashboard to validate business model
+
+### Backend Infrastructure Requirements (May 2024)
+
+**Core Services Needed**:
+
+1. **Organization Service**: Create/manage orgs, onboarding tracking, plan association
+2. **Plan Service**: Plan definitions, recommendations, usage calculations
+3. **Usage Service**: Track API requests, billing calculations, rate limiting
+4. **Stripe Service**: Payment processing, subscription lifecycle, webhooks
+5. **Onboarding Service**: Progressive data collection, state management
+
+**Database Extensions**:
+
+- Stripe integration tables (via Better-auth plugin)
+- Usage tracking tables for billing
+- Organization metadata for plan/billing info
+- Onboarding state tracking
+
+### Admin Dashboard Requirements (May 2024)
+
+**Manual Onboarding Features Needed**:
+
+1. **Organization Management**:
+
+   - View all organizations (table with search/filter)
+   - Create new organizations manually
+   - Edit organization details (name, slug, metadata)
+
+2. **Plan Management**:
+
+   - View current plan for each organization
+   - Change organization plans manually
+   - Override plan limits temporarily
+   - View plan usage and billing status
+
+3. **Member Management**:
+
+   - View organization members
+   - Add members to organizations (invite by email)
+   - Remove members from organizations
+   - Change member roles (owner, admin, member)
+
+4. **Usage Analytics**:
+
+   - Real-time usage tracking per organization
+   - Monthly usage reports
+   - API key usage breakdown
+   - Rate limiting status
+
+5. **Billing Oversight**:
+   - View subscription status
+   - Manual subscription overrides
+   - Usage-based billing calculations
+   - Payment status monitoring
+
 ---
 
 (Add new context and decisions below as the project evolves)

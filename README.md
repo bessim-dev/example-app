@@ -1,4 +1,4 @@
-# example-app
+# OCRUS
 
 This application uses a client - server architecture.
 

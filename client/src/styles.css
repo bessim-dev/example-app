@@ -38,7 +38,7 @@ code {
   --muted-foreground: oklch(0.3211 0 0);
   --accent: oklch(0.7217 0.1692 133.8321);
   --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0 0 0);
+  --destructive: oklch(0.6 0.25 25);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0 0 0);
   --input: oklch(0 0 0);

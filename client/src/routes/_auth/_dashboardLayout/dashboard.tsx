@@ -3,7 +3,8 @@ import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { DataTable } from "@/components/data-table";
 import { SectionCards } from "@/components/section-cards";
 import data from "@/lib/data.json";
-export const Route = createFileRoute("/_auth/dashboard")({
+import { columns } from "@/columns/dashboard";
+export const Route = createFileRoute("/_auth/_dashboardLayout/dashboard")({
   component: RouteComponent,
 });
 
@@ -14,7 +15,7 @@ function RouteComponent() {
         <div className="flex flex-col gap-4 md:gap-6 md:py-6">
           <SectionCards />
           <ChartAreaInteractive />
-          <DataTable data={data} />
+          <DataTable data={data} columns={columns} />
         </div>
       </div>
     </div>

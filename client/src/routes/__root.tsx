@@ -3,11 +3,13 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { authClient } from "@/lib/auth-client";
+import type { Organization } from "better-auth/plugins/organization";
 
 export interface RouterContext {
   queryClient: QueryClient;
   auth: {
     isAuthenticated: boolean;
+    activeOrganization: Organization | null;
   } & typeof authClient;
 }
 

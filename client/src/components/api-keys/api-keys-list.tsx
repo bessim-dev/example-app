@@ -10,74 +10,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { EmptyState } from "@/components/empty-state";
-import { RevokeKeyDialog } from "@/components/revoke-key-dialog";
-import { MoreHorizontal } from "lucide-react";
+import { RevokeKeyDialog } from "@/components/api-keys/revoke-key-dialog";
 import { formatDistanceToNow } from "date-fns";
-import { toast } from "sonner";
-import { authClient } from "@/lib/auth-client";
-import {
-  queryOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-
-const apiKeysQueryOptions = queryOptions({
-  queryKey: ["api-keys"],
-  queryFn: async () => {
-    const { data, error } = await authClient.apiKey.list({
-      query: {
-        limit: 100,
-      },
-    });
-    if (error) {
-      throw error;
-    }
-    return data;
-  },
-});
-
-const useDeleteApiKeyMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await authClient.apiKey.delete({
-        keyId: id,
-      });
-      if (error) {
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["api-keys"] });
-      toast.success("API key revoked successfully");
-    },
-  });
-};
+import { useQuery } from "@tanstack/react-query";
+import { useDeleteApiKeyMutation } from "@/lib/api-keys";
+import { apiKeysQueryOptions } from "@/lib/api-keys";
 
 export function ApiKeysList() {
   const { data: apiKeys } = useQuery(apiKeysQueryOptions);
   const [keyToRevoke, setKeyToRevoke] = useState<string | null>(null);
   const { mutate: deleteApiKey } = useDeleteApiKeyMutation();
-
-  const handleCopyKey = (key: string, name: string) => {
-    navigator.clipboard
-      .writeText(key)
-      .then(() => {
-        toast.success(`API key "${name}" copied to clipboard`);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
-        toast.error("Failed to copy API key to clipboard");
-      });
-  };
 
   if (apiKeys?.length === 0 || !apiKeys) {
     return <EmptyState />;
@@ -118,14 +61,6 @@ export function ApiKeysList() {
                     <code className="rounded bg-muted px-1 py-0.5 text-sm">
                       {apiKey.id}
                     </code>
-                    {/* <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6"
-                      onClick={() => handleCopyKey(apiKey.id, apiKey.name!)}>
-                      <Copy className="h-3.5 w-3.5" />
-                      <span className="sr-only">Copy API key</span>
-                    </Button> */}
                   </div>
                   <div className="text-xs text-muted-foreground">
                     Created{" "}

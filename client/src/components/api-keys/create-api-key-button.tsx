@@ -29,17 +29,10 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Plus } from "lucide-react";
 import { ApiKeyCreatedDialog } from "./api-key-created-dialog";
-import { authClient } from "@/lib/auth-client";
-
-const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  expiration: z.string(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { useCreateApiKeyMutation } from "@/lib/api-keys";
+import { formSchema, type FormValues } from "@/lib/schemas";
 
 export function CreateApiKeyButton({
   variant = "outline",
@@ -48,36 +41,19 @@ export function CreateApiKeyButton({
 }) {
   const [open, setOpen] = useState(false);
   const [createdKey, setCreatedKey] = useState<string | null>(null);
-
+  const { mutate: createApiKey } = useCreateApiKeyMutation();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      expiration: "never",
+      expiresIn: undefined,
     },
   });
 
   const onSubmit = async (data: FormValues) => {
-    // In a real app, you would call your API to create a new key
-    console.log("Creating API key:", data);
-    const { data: apiKey, error } = await authClient.apiKey.create({
-      name: data.name,
-      expiresIn:
-        data.expiration === "never"
-          ? undefined
-          : Number(data.expiration) * 24 * 60 * 60,
-      prefix: "my_app",
-      // metadata: {
-      //   tier: "premium",
-      // },
-    });
-    if (error) {
-      console.error(error);
-    }
-    setCreatedKey(apiKey?.key ?? null);
+    createApiKey(data);
     form.reset();
-    // Don't close the first dialog until after we've set the created key
-    setTimeout(() => setOpen(false), 100);
+    setOpen(false);
   };
 
   return (
@@ -117,13 +93,13 @@ export function CreateApiKeyButton({
 
               <FormField
                 control={form.control}
-                name="expiration"
+                name="expiresIn"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Expiration</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}>
+                      defaultValue={field.value?.toString() ?? "never"}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select an expiration" />
@@ -152,7 +128,11 @@ export function CreateApiKeyButton({
                   onClick={() => setOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit">Create API Key</Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting
+                    ? "Creating..."
+                    : "Create API Key"}
+                </Button>
               </DialogFooter>
             </form>
           </Form>

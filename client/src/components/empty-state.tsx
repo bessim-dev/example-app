@@ -1,13 +1,21 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Key } from "lucide-react"
-import { CreateApiKeyButton } from "./create-api-key-button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Key } from "lucide-react";
+import { CreateApiKeyButton } from "./api-keys/create-api-key-button";
 
 export function EmptyState() {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Your API Keys</CardTitle>
-        <CardDescription>API keys provide authentication to the API. Keep your API keys secure.</CardDescription>
+        <CardDescription>
+          API keys provide authentication to the API. Keep your API keys secure.
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-center justify-center py-10">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
@@ -20,5 +28,5 @@ export function EmptyState() {
         <CreateApiKeyButton variant="default" />
       </CardContent>
     </Card>
-  )
+  );
 }
