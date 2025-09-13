@@ -3,7 +3,6 @@ import { SignUpForm } from "@/components/signup-form";
 import {
   createFileRoute,
   redirect,
-  useParams,
   useSearch,
 } from "@tanstack/react-router";
 import { GalleryVerticalEnd } from "lucide-react";

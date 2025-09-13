@@ -30,10 +30,30 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     },
   },
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          const activeOrganization = await prisma.organization.findFirst({
+            where: {
+              members: {
+                some: { userId: session.userId },
+              },
+            },
+          });
+          if (activeOrganization) {
+            session.activeOrganizationId = activeOrganization.id;
+          }
+          return session;
+        },
+      }
+    }
+  },
   plugins: [
     admin(),
     apiKey(),
     organization({
+      organizationLimit: 1,
       // organizationCreation: {
       //   async beforeCreate(data) {
       //     console.log("beforeCreate", data);
@@ -83,7 +103,39 @@ export const auth = betterAuth({
           enabled: true,
         },
         plans,
+        async authorizeReference({ action, referenceId, user, session }, ctx) {
+          if (action === "upgrade-subscription" || action === "list-subscription" || action === "cancel-subscription" || action === "restore-subscription" || action === "billing-portal") {
+            const organization = await prisma.organization.findUnique({
+              where: { id: referenceId },
+            });
+            if (!organization) {
+              return false;
+            }
+            const members = await prisma.member.findMany({
+              where: {
+                organizationId: referenceId,
+                userId: user.id,
+              },
+            });
+            const isOwner = members.some((member) => member.role === "owner");
+            if (!isOwner) {
+              return false;
+            }
+            return true;
+          }
+          return false;
+        },
       },
+      onEvent: async (event) => {
+        switch (event.type) {
+          case "customer.subscription.created":
+            console.log("subscription.created", event.data);
+            break;
+          case "customer.subscription.updated":
+            console.log("subscription.updated", event.data);
+        }
+      },
+
     }),
   ],
 });

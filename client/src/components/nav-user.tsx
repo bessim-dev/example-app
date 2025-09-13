@@ -23,9 +23,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
-import { useEffect } from "react";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -35,8 +34,10 @@ export function NavUser() {
   const handleLogout = async () => {
     try {
       await authClient.signOut();
+      router.navigate({ to: "/login" });
     } catch (error) {
       console.error("Logout failed:", error);
+      router.invalidate();
     }
   };
 
@@ -46,12 +47,6 @@ export function NavUser() {
     avatar: session?.user?.image || "/avatars/shadcn.jpg",
   };
 
-  useEffect(() => {
-    if (session?.user) {
-      console.log("invalidating");
-      router.invalidate();
-    }
-  }, [session?.user]);
   return (
     <SidebarMenu>
       <SidebarMenuItem>

@@ -10,13 +10,13 @@ export const Route = createFileRoute("/_auth")({
         to: "/login",
         search: { redirect: location.href, },
       });
-    } else if (!context.auth.activeOrganization) {
-      throw redirect({
-        to: "/on-boarding",
-        search: {
-          redirect: location.href,
-        },
-      });
+    } else if (!context.auth.activeOrganization || !context.auth.activeOrganization.metadata?.subscriptionId) {
+      // throw redirect({
+      //   to: "/on-boarding",
+      //   search: {
+      //     redirect: location.href,
+      //   },
+      // });
     }
   },
 });

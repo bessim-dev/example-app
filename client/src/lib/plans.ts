@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { authClient } from "./auth-client";
 
 export const plans = [
@@ -51,15 +51,35 @@ export const plans = [
 ];
 
 
-export const useGetPlans = () => {
+export const useUpgradePlan = () => {
   return useMutation({
-    mutationFn: async ({ plan }: { plan: "free" | "pro" | "enterprise" }) => {
+    mutationFn: async ({ plan, organizationId }: { plan: "free" | "pro" | "enterprise", organizationId: string }) => {
       const { data, error } = await authClient.subscription.upgrade({
         plan,
-        annual: true,
-        successUrl: "/dashboard",
-        cancelUrl: "/on-boarding",
+        annual: false,
+        successUrl: `${window.location.origin}/on-boarding`,
+        cancelUrl: `${window.location.origin}/on-boarding`,
+        referenceId: organizationId,
       })
+      if (error) throw new Error(error.message);
+      return data;
+    },
+  });
+};
+
+export const useGetPlans = (organizationId?: string) => {
+  if (!organizationId) {
+    throw new Error("Organization ID is required to get plans");
+  }
+  return useQuery({
+    queryKey: ["plans"],
+    queryFn: async () => {
+      const { data, error } = await authClient.subscription.list({
+        query: {
+          referenceId: organizationId,
+        },
+      });
+      console.error("error", error);
       if (error) throw new Error(error.message);
       return data;
     },

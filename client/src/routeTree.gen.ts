@@ -16,11 +16,8 @@ import { Route as AuthDashboardLayoutRouteImport } from './routes/_auth/_dashboa
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as AuthDashboardLayoutRequestsRouteImport } from './routes/_auth/_dashboardLayout/requests'
 import { Route as AuthDashboardLayoutDashboardRouteImport } from './routes/_auth/_dashboardLayout/dashboard'
+import { Route as AuthDashboardLayoutBillingRouteImport } from './routes/_auth/_dashboardLayout/billing'
 import { Route as AuthDashboardLayoutApiKeysRouteImport } from './routes/_auth/_dashboardLayout/api-keys'
-import { Route as AuthDashboardLayoutOrganizationsIndexRouteImport } from './routes/_auth/_dashboardLayout/organizations/index'
-import { Route as AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteImport } from './routes/_auth/_dashboardLayout/organizations/$organizationId/route'
-import { Route as AuthDashboardLayoutOrganizationsOrganizationIdIndexRouteImport } from './routes/_auth/_dashboardLayout/organizations/$organizationId/index'
-import { Route as AuthDashboardLayoutOrganizationsOrganizationIdMembersRouteImport } from './routes/_auth/_dashboardLayout/organizations/$organizationId/members'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -57,37 +54,17 @@ const AuthDashboardLayoutDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => AuthDashboardLayoutRoute,
   } as any)
+const AuthDashboardLayoutBillingRoute =
+  AuthDashboardLayoutBillingRouteImport.update({
+    id: '/billing',
+    path: '/billing',
+    getParentRoute: () => AuthDashboardLayoutRoute,
+  } as any)
 const AuthDashboardLayoutApiKeysRoute =
   AuthDashboardLayoutApiKeysRouteImport.update({
     id: '/api-keys',
     path: '/api-keys',
     getParentRoute: () => AuthDashboardLayoutRoute,
-  } as any)
-const AuthDashboardLayoutOrganizationsIndexRoute =
-  AuthDashboardLayoutOrganizationsIndexRouteImport.update({
-    id: '/organizations/',
-    path: '/organizations/',
-    getParentRoute: () => AuthDashboardLayoutRoute,
-  } as any)
-const AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute =
-  AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteImport.update({
-    id: '/organizations/$organizationId',
-    path: '/organizations/$organizationId',
-    getParentRoute: () => AuthDashboardLayoutRoute,
-  } as any)
-const AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute =
-  AuthDashboardLayoutOrganizationsOrganizationIdIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () =>
-      AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute,
-  } as any)
-const AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute =
-  AuthDashboardLayoutOrganizationsOrganizationIdMembersRouteImport.update({
-    id: '/members',
-    path: '/members',
-    getParentRoute: () =>
-      AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -95,23 +72,18 @@ export interface FileRoutesByFullPath {
   '/login': typeof authLoginRoute
   '/on-boarding': typeof AuthOnBoardingRoute
   '/api-keys': typeof AuthDashboardLayoutApiKeysRoute
+  '/billing': typeof AuthDashboardLayoutBillingRoute
   '/dashboard': typeof AuthDashboardLayoutDashboardRoute
   '/requests': typeof AuthDashboardLayoutRequestsRoute
-  '/organizations/$organizationId': typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren
-  '/organizations': typeof AuthDashboardLayoutOrganizationsIndexRoute
-  '/organizations/$organizationId/members': typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute
-  '/organizations/$organizationId/': typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof authLoginRoute
   '/on-boarding': typeof AuthOnBoardingRoute
   '/api-keys': typeof AuthDashboardLayoutApiKeysRoute
+  '/billing': typeof AuthDashboardLayoutBillingRoute
   '/dashboard': typeof AuthDashboardLayoutDashboardRoute
   '/requests': typeof AuthDashboardLayoutRequestsRoute
-  '/organizations': typeof AuthDashboardLayoutOrganizationsIndexRoute
-  '/organizations/$organizationId/members': typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute
-  '/organizations/$organizationId': typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,12 +93,9 @@ export interface FileRoutesById {
   '/_auth/_dashboardLayout': typeof AuthDashboardLayoutRouteWithChildren
   '/_auth/on-boarding': typeof AuthOnBoardingRoute
   '/_auth/_dashboardLayout/api-keys': typeof AuthDashboardLayoutApiKeysRoute
+  '/_auth/_dashboardLayout/billing': typeof AuthDashboardLayoutBillingRoute
   '/_auth/_dashboardLayout/dashboard': typeof AuthDashboardLayoutDashboardRoute
   '/_auth/_dashboardLayout/requests': typeof AuthDashboardLayoutRequestsRoute
-  '/_auth/_dashboardLayout/organizations/$organizationId': typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren
-  '/_auth/_dashboardLayout/organizations/': typeof AuthDashboardLayoutOrganizationsIndexRoute
-  '/_auth/_dashboardLayout/organizations/$organizationId/members': typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute
-  '/_auth/_dashboardLayout/organizations/$organizationId/': typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -135,23 +104,18 @@ export interface FileRouteTypes {
     | '/login'
     | '/on-boarding'
     | '/api-keys'
+    | '/billing'
     | '/dashboard'
     | '/requests'
-    | '/organizations/$organizationId'
-    | '/organizations'
-    | '/organizations/$organizationId/members'
-    | '/organizations/$organizationId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/on-boarding'
     | '/api-keys'
+    | '/billing'
     | '/dashboard'
     | '/requests'
-    | '/organizations'
-    | '/organizations/$organizationId/members'
-    | '/organizations/$organizationId'
   id:
     | '__root__'
     | '/'
@@ -160,12 +124,9 @@ export interface FileRouteTypes {
     | '/_auth/_dashboardLayout'
     | '/_auth/on-boarding'
     | '/_auth/_dashboardLayout/api-keys'
+    | '/_auth/_dashboardLayout/billing'
     | '/_auth/_dashboardLayout/dashboard'
     | '/_auth/_dashboardLayout/requests'
-    | '/_auth/_dashboardLayout/organizations/$organizationId'
-    | '/_auth/_dashboardLayout/organizations/'
-    | '/_auth/_dashboardLayout/organizations/$organizationId/members'
-    | '/_auth/_dashboardLayout/organizations/$organizationId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -225,6 +186,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardLayoutDashboardRouteImport
       parentRoute: typeof AuthDashboardLayoutRoute
     }
+    '/_auth/_dashboardLayout/billing': {
+      id: '/_auth/_dashboardLayout/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof AuthDashboardLayoutBillingRouteImport
+      parentRoute: typeof AuthDashboardLayoutRoute
+    }
     '/_auth/_dashboardLayout/api-keys': {
       id: '/_auth/_dashboardLayout/api-keys'
       path: '/api-keys'
@@ -232,71 +200,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardLayoutApiKeysRouteImport
       parentRoute: typeof AuthDashboardLayoutRoute
     }
-    '/_auth/_dashboardLayout/organizations/': {
-      id: '/_auth/_dashboardLayout/organizations/'
-      path: '/organizations'
-      fullPath: '/organizations'
-      preLoaderRoute: typeof AuthDashboardLayoutOrganizationsIndexRouteImport
-      parentRoute: typeof AuthDashboardLayoutRoute
-    }
-    '/_auth/_dashboardLayout/organizations/$organizationId': {
-      id: '/_auth/_dashboardLayout/organizations/$organizationId'
-      path: '/organizations/$organizationId'
-      fullPath: '/organizations/$organizationId'
-      preLoaderRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteImport
-      parentRoute: typeof AuthDashboardLayoutRoute
-    }
-    '/_auth/_dashboardLayout/organizations/$organizationId/': {
-      id: '/_auth/_dashboardLayout/organizations/$organizationId/'
-      path: '/'
-      fullPath: '/organizations/$organizationId/'
-      preLoaderRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRouteImport
-      parentRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute
-    }
-    '/_auth/_dashboardLayout/organizations/$organizationId/members': {
-      id: '/_auth/_dashboardLayout/organizations/$organizationId/members'
-      path: '/members'
-      fullPath: '/organizations/$organizationId/members'
-      preLoaderRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRouteImport
-      parentRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute
-    }
   }
 }
-
-interface AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteChildren {
-  AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute
-  AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute
-}
-
-const AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteChildren: AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteChildren =
-  {
-    AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute:
-      AuthDashboardLayoutOrganizationsOrganizationIdMembersRoute,
-    AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute:
-      AuthDashboardLayoutOrganizationsOrganizationIdIndexRoute,
-  }
-
-const AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren =
-  AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute._addFileChildren(
-    AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteChildren,
-  )
 
 interface AuthDashboardLayoutRouteChildren {
   AuthDashboardLayoutApiKeysRoute: typeof AuthDashboardLayoutApiKeysRoute
+  AuthDashboardLayoutBillingRoute: typeof AuthDashboardLayoutBillingRoute
   AuthDashboardLayoutDashboardRoute: typeof AuthDashboardLayoutDashboardRoute
   AuthDashboardLayoutRequestsRoute: typeof AuthDashboardLayoutRequestsRoute
-  AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute: typeof AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren
-  AuthDashboardLayoutOrganizationsIndexRoute: typeof AuthDashboardLayoutOrganizationsIndexRoute
 }
 
 const AuthDashboardLayoutRouteChildren: AuthDashboardLayoutRouteChildren = {
   AuthDashboardLayoutApiKeysRoute: AuthDashboardLayoutApiKeysRoute,
+  AuthDashboardLayoutBillingRoute: AuthDashboardLayoutBillingRoute,
   AuthDashboardLayoutDashboardRoute: AuthDashboardLayoutDashboardRoute,
   AuthDashboardLayoutRequestsRoute: AuthDashboardLayoutRequestsRoute,
-  AuthDashboardLayoutOrganizationsOrganizationIdRouteRoute:
-    AuthDashboardLayoutOrganizationsOrganizationIdRouteRouteWithChildren,
-  AuthDashboardLayoutOrganizationsIndexRoute:
-    AuthDashboardLayoutOrganizationsIndexRoute,
 }
 
 const AuthDashboardLayoutRouteWithChildren =

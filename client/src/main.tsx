@@ -39,9 +39,11 @@ function InnerApp() {
   const { data: activeOrganization, isPending: isActiveOrganizationPending } =
     auth.useActiveOrganization();
 
+
   if (isPending || isActiveOrganizationPending) {
     return <div>Loading...</div>;
   }
+
   const isAuthenticated = !!session && !!session.user;
   return (
     <RouterProvider

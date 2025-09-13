@@ -18,18 +18,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { authClient } from "@/lib/auth-client";
 import { IconInnerShadowTop } from "@tabler/icons-react";
+import type { Organization } from "better-auth/plugins/organization";
+import { useSetActiveOrganization } from "@/lib/organizations";
 
-export function TeamSwitcher() {
-  const {
-    data: organizations,
-    isPending,
-    error,
-  } = authClient.useListOrganizations();
+export function TeamSwitcher({ data, activeOrganizationId }: { data: Organization[], activeOrganizationId: string | null | undefined }) {
   const { isMobile } = useSidebar();
-  const [activeTeam, setActiveTeam] = React.useState(organizations?.[0]);
-
+  const [activeTeam, setActiveTeam] = React.useState(data.find((org) => org.id === activeOrganizationId));
+  const { mutate: setActiveOrganization, isPending: isSetActiveOrganizationPending } = useSetActiveOrganization();
   if (!activeTeam) {
     return null;
   }
@@ -60,14 +56,20 @@ export function TeamSwitcher() {
             <DropdownMenuLabel className="text-muted-foreground text-xs">
               Organizations
             </DropdownMenuLabel>
-            {organizations?.map((org, index) => (
+            {data.map((org, index) => (
               <DropdownMenuItem
                 key={org.id}
-                onClick={() => setActiveTeam(org)}
+                onClick={() => {
+                  setActiveOrganization(org.id);
+                  setActiveTeam(org);
+                }}
                 className="gap-2 p-2">
-                <div className="flex size-6 items-center justify-center rounded-md border">
-                  <IconInnerShadowTop className="size-3.5 shrink-0" />
-                </div>
+                {
+                  isSetActiveOrganizationPending ? <div>Loading...</div> :
+                    <div className="flex size-6 items-center justify-center rounded-md border">
+                      <IconInnerShadowTop className="size-3.5 shrink-0" />
+                    </div>
+                }
                 {org.name}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>

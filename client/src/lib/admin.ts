@@ -13,7 +13,6 @@ import {
   type UserFormSchemaType,
 } from "@/components/organizations/onboarding/schema";
 
-const ADMINID = import.meta.env.VITE_ADMIN_ID;
 const QUERY_KEYS = {
   all: ["admin"],
   listsOrganizations: () => [...QUERY_KEYS.all, "organizations"],

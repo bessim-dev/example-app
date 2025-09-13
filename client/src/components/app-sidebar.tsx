@@ -32,6 +32,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { TeamSwitcher } from "./team-switcher";
+import { authClient } from "@/lib/auth-client";
 
 const data = {
   navMain: [
@@ -56,15 +57,10 @@ const data = {
       icon: IconKey,
     },
     {
-      title: "Organizations",
-      url: "/organizations",
-      icon: IconBuilding,
+      title: "Billing",
+      url: "/billing",
+      icon: IconCreditCard,
     },
-    // {
-    //   title: "Billing",
-    //   url: "#",
-    //   icon: IconCreditCard,
-    // },
   ],
   navClouds: [
     {
@@ -136,11 +132,7 @@ const data = {
     },
   ],
   documents: [
-    {
-      name: "Usage Reports",
-      url: "#",
-      icon: IconReport,
-    },
+
     {
       name: "Integration Guide",
       url: "#",
@@ -155,10 +147,18 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const {
+    data: organizations,
+    isPending,
+  } = authClient.useListOrganizations();
+  const { data: auth } = authClient.useSession();
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <TeamSwitcher />
+        {
+          isPending ? <div>Loading...</div> : <TeamSwitcher data={organizations || []} activeOrganizationId={auth?.session?.activeOrganizationId} />
+        }
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

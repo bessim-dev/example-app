@@ -3,36 +3,47 @@ import Step2PlanSelection from "@/components/organizations/onboarding/plan-selec
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCreateOrganization } from "@/lib/admin";
-import { useGetPlans } from "@/lib/plans";
+import { useUpgradePlan } from "@/lib/plans";
 import { createFileRoute, redirect, useNavigate, useSearch } from "@tanstack/react-router";
 import { CheckCircle2, ArrowLeft } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
 import { z } from "zod";
+
 export const Route = createFileRoute("/_auth/on-boarding")({
   validateSearch: z.object({
     redirect: z.string().optional(),
     organizationId: z.string().optional(),
+    step: z.number().default(1),
   }),
   beforeLoad: ({ context }) => {
     if (context.auth.activeOrganization) {
-      throw redirect({
-        to: "/dashboard",
-      });
+      console.log("context.auth.activeOrganization", context.auth.activeOrganization);
+      if (context.auth.activeOrganization.metadata?.subscriptionId) {
+        redirect({
+          to: "/dashboard",
+        });
+      } else {
+        redirect({
+          to: "/on-boarding",
+          search: {
+            organizationId: context.auth.activeOrganization.id,
+            step: 2,
+          },
+        });
+      }
+      // throw redirect({
+      //   to: "/dashboard",
+      // });
     }
   },
   component: OnboardingPage,
 });
 
-type OrgData = { name: string; slug: string; logo?: string };
-
 function OnboardingPage() {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [org, setOrg] = useState<OrgData | null>(null);
   const navigate = useNavigate({ from: "/on-boarding" });
-  const { organizationId } = useSearch({ from: "/_auth/on-boarding" });
+  const { organizationId, step } = useSearch({ from: "/_auth/on-boarding" });
   const { mutateAsync: createOrganization } = useCreateOrganization();
-  const { mutateAsync: getPlans } = useGetPlans();
+  const { mutateAsync: upgradePlan } = useUpgradePlan();
   const steps = [
     { id: 1 as const, label: "Organization" },
     { id: 2 as const, label: "Plan" },
@@ -101,10 +112,9 @@ function OnboardingPage() {
                     navigate({
                       search: {
                         organizationId: data.id,
+                        step: 2,
                       }
                     })
-                    setOrg(value);
-                    setStep(2);
                   }}
                 />
               </motion.div>
@@ -120,23 +130,23 @@ function OnboardingPage() {
                 <div className="mx-auto">
                   <Step2PlanSelection
                     handleSubmit={async (value) => {
-                      // Combine data and proceed. Replace with real API call when available.
-                      const payload = {
-                        ...(org ?? {}),
-                        plan: value.plan,
-                      } as const;
-                      // eslint-disable-next-line no-console
-                      console.log("onboarding payload", payload);
-                      const data = await getPlans({ plan: value.plan as "free" | "pro" | "enterprise" });
-                      console.log("data", data);
-                      setStep(3);
-                      setTimeout(() => {
-                        navigate({ to: "/dashboard" });
-                      }, 800);
+                      if (!organizationId) {
+                        throw new Error("Organization ID is required to upgrade plan");
+                      }
+                      const data = await upgradePlan({ plan: value.plan as "free" | "pro" | "enterprise", organizationId });
+                      navigate({
+                        search: {
+                          step: 3,
+                        }
+                      })
                     }}
                   />
                   <div className="mt-4 flex items-center justify-between">
-                    <Button variant="ghost" onClick={() => setStep(1)}>
+                    <Button variant="ghost" onClick={() => navigate({
+                      search: {
+                        step: 1,
+                      }
+                    })}>
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Back
                     </Button>
